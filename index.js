@@ -1,7 +1,7 @@
 import Nodeling from './src/models/nodeling';
+import Sensory from './src/models/sensory';
 
-const window = window || {};
-window.environment = {};
+const environment = {};
 
 const coords = [0, 0, 0];
 const hypothalimus = {
@@ -15,6 +15,12 @@ const config = {
     coords
 };
 
-const firstNode = Nodeling(config, window.environment);
+const firstNode = Nodeling(config, environment);
 
-console.log(window.environment);
+const sensory = Sensory(environment);
+
+console.log({
+    environment,
+    sensory,
+    firstNode
+});

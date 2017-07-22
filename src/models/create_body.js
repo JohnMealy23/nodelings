@@ -11,11 +11,11 @@ const CreateBody = function() {
             body.color = color;
         }
         body.$elem.style.background = color;
-        setTimeout(() => {
-            this.neighborhood.neighbors.forEach(neighbor => {
-                neighbor.body.updateNeighborColor(color);
+            this.neighborhood.children.forEach(neighbor => {
+                setTimeout(() => {
+                    neighbor.body.updateNeighborColor(color);
+                }, 200);
             });
-        }, 200);
     };
 
     body.$elem = (() => {
