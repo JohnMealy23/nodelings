@@ -1,3 +1,8 @@
 {
-  "presets": ["airbnb", "stage-2"]
+  "presets": [
+    "es2015-node6"
+  ],
+  "plugins": [
+    "transform-async-to-generator"
+  ]
 }

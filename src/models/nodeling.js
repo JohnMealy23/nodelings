@@ -1,5 +1,5 @@
 import utils from './utils';
-import GetNeighborhood from './methods/get_neighbors';
+import GetNeighborhood from './neighborhood';
 import CreateApi from './create_api';
 import CreateBody from './create_body';
 /**
@@ -9,9 +9,7 @@ import CreateBody from './create_body';
  * @returns {{}}
  * @constructor
  */
-debugger
-const Nodeling = function(config, environment = []) {
-
+function Nodeling(config, environment = []) {
     const nodeling = {};
 
     // Clone the coords to sever parity:
@@ -31,6 +29,9 @@ const Nodeling = function(config, environment = []) {
      */
     environment[nodeling.key] = nodeling;
 
+    // Create the api with which other nodelings will communicate
+    nodeling.api = CreateApi.call(nodeling);
+
     /*
      * Create children and catalog neighbors.
      *
@@ -43,16 +44,18 @@ const Nodeling = function(config, environment = []) {
      * This would require a way for each nodeling to be able to check a global registry, to ensure it wasn't creating a
      * nodeling at coordinates where another lineage had already created a nodeling.
      */
-    nodeling.neighborhood = GetNeighborhood(nodeling.coords, config, environment);
+    nodeling.neighborhood = GetNeighborhood.call(nodeling, config, environment);
 
     // Create the GUI elements for the nodeling:
-    nodeling.body = CreateBody.apply(nodeling);
+    nodeling.body = CreateBody.call(nodeling, config);
 
-    // Create the api with which other nodelings will communicate
-    nodeling.api = CreateApi.apply(nodeling);
 
-    console.log(`nodeling ${nodeling.key} has been created!`)
-    return nodeling;
+    console.log(`nodeling ${nodeling.key} has been created!`);
+
+    // This step ensures that all of a nodeling's children have formed, before it passes itself back to its parent:
+    return nodeling.neighborhood.promise.then(() => {
+        return nodeling;
+    })
 };
 
 

@@ -8,7 +8,6 @@ const Sensory = function(environment) {
        }
        return false;
     });
-
     return sensory;
 };
 
